@@ -143,3 +143,15 @@ for nonterminal in G8.nonterminals:
 	print "first_3(%s) = %s" % (nonterminal, format_wordlist(first(G8, 3, [nonterminal])))
 for nonterminal in G8.nonterminals:
 	print "follow_3(%s) = %s" % (nonterminal, format_wordlist(follow(G8, 3, nonterminal)))
+G9 = Grammar(
+    terminals = ["(", ")"],
+    nonterminals = ["E"],
+    productions = [
+        ("E", ["(", "E", ")"])
+    ],
+    start = "E"
+)
+print ""
+print G9
+print "first_1(E) = %s" % format_wordlist(first(G9, 1, ["E"]))
+print "first_2(E) = %s" % format_wordlist(first(G9, 2, ["E"]))

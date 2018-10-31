@@ -102,14 +102,21 @@ def first_no_eof(grammar, k, sequence):
 
 	def iter(k, seq):
 		firsts = map(get_first, seq)
-		# Now reduce them with k-concatenation over the powersets.
-		# We can stop as soon as there are no more terminal
-		# sequences in words that are of length less than k.
-		# The default, used for i.e. empty production rules,
-		# is the singleton set with the epsilon word.
+		if any(len(first) == 0 for first in firsts):
+			# The below code assumes that none of the first sets are empty
+			# anymore, to perform the complete_words optimisation. Otherwise,
+			# there are cases where there would be non-empty first sets for
+			# i.e. k=1 but for k=2 it would be empty (which would be correct).
+			# This happens for the grammar "E -> ( E )", which generates an
+			# empty language.
+			return set()
+		# Now reduce them with k-concatenation over the powersets.  We can stop
+		# as soon as there are no more terminal sequences in words that are of
+		# length less than k.  The default, used for i.e. empty production
+		# rules, is the singleton set with the epsilon word.
 		words = {epsilon}
-		# complete_words stores words of length k.
-		# These are left absorbing elements of k-concatenation.
+		# complete_words stores words of length k.  These are left absorbing
+		# elements of k-concatenation.
 		complete_words = set()
 		for first in firsts:
 			if len(words) == 0:
